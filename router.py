@@ -1,36 +1,37 @@
-import os
-from together import Together
+# our usual suspects
+the_usual_suspects = [
+    {
+        "endpoint": "NousResearch/Nous-Hermes-2-Mistral-7B-DPO",
+        "price": "0.2",
+        "type": "Chat",
+    },
+    {"endpoint": "mistralai/Mixtral8x22B", "price": "1.2", "type": "Language"},
+    {"endpoint": "google/gemma-2b", "price": "0.1", "type": "Language"},
+]
+
 
 class Router:
-  models: list
+    def __init__(self, models):
+        self.models = models
 
-  def _get_optimal_model(query):
-    pass
+    def _get_optimal_model(self, query):
+        if len(query) <= 4000:  #
+            return "google/gemma-2b"
+        elif len(query) <= 10000:
+            return "NousResearch/Nous-Hermes-2-Mistral-7B-DPO"
+        else:
+            return "mistralai/Mixtral8x22B"
 
-  def call_model(query, model):
-    """
-    Takes a model and an input prompt, calls Together.ai and outputs response
-    """
-    client = Together(api_key=os.environ['TOGETHER_API_KEY'])
+    def _call_model(self, query, model):
+        return query, model
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": query}],
-    )
-    return response.choices[0].message.content
-  
-  def call_model_stream(query, model):
-    client = Together(api_key=os.environ.get("TOGETHER_API_KEY"))
-    stream = client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": query}],
-        stream=True,
-    )
+    def answer_query(self, query):
+        model_endpoint = self._get_optimal_model(query)
+        answer = self._call_model(query, model_endpoint)
+        return answer
 
-    for chunk in stream:
-        yield chunk.choices[0].delta.content
 
-  
-  def answer_query(query):
-    model = _get_optimal_model(query)
-    pass
+if __name__ == "__main__":
+    router = Router(the_usual_suspects)
+    answer = router.answer_query("This is a test")
+    print(answer)
