@@ -17,7 +17,7 @@ class Router:
     def _get_optimal_model(self, query):
         if len(query) <= 4000:  #
             return "google/gemma-2b"
-        elif len(query) >= 4000 and len(query) <= 10000:
+        elif len(query) <= 10000:
             return "NousResearch/Nous-Hermes-2-Mistral-7B-DPO"
         else:
             return "mistralai/Mixtral8x22B"
