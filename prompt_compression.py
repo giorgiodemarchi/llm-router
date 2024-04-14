@@ -20,8 +20,7 @@ model="mistralai/Mixtral-8x7B-Instruct-v0.1"
 
 
 # prompt = "Question: Sam bought a dozen boxes, each with 30 highlighter pens inside, for $10 each box. He reanged five of boxes into packages of sixlters each and sold them $3 per. He sold the rest theters separately at the of three pens $2. How much did make in total, dollars?\nLets think step step\nSam bought 1 boxes x00 oflters.\nHe bought 12 * 300ters in total\nSam then took 5 boxes 6ters0ters.\nHe sold these boxes for 5 *5\nAfterelling these  boxes there were 3030 highlighters remaining.\nThese form 330 / 3 = 110 groups of three pens.\nHe sold each of these groups for $2 each, so made 110 * 2 = $220 from them.\nIn total, then, he earned $220 + $15 = $235.\nSince his original cost was $120, he earned $235 - $120 = $115 in profit.\nThe answer is 115"
-prompt = """
-Question: Given the following text, what is attention?
+context = """
 Introduction
 Recurrent neural networks, long short-term memory [13] and gated recurrent [7] neural networks
 in particular, have been firmly established as state of the art approaches in sequence modeling and
@@ -193,12 +192,15 @@ our model, we share the same weight matrix between the two embedding layers and 
 
 """
 
-response = chat_completion(prompt, model)
+context = context.split('\n')
+question = "What is attention?"
+original_prompt = context + " " + question
+response = chat_completion(original_prompt, model)
 
 print(response)
 
 llm_lingua = PromptCompressor()
-compressed_prompt = llm_lingua.compress_prompt(prompt, instruction="", question="", target_token=200, rate=0.55)
+compressed_prompt = llm_lingua.compress_prompt(context, instruction="", question=question, target_token=200)
 
 compressed_response = chat_completion(compressed_prompt['compressed_prompt'], model)
 print(compressed_response)
