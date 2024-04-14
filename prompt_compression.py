@@ -200,5 +200,5 @@ print(response)
 llm_lingua = PromptCompressor()
 compressed_prompt = llm_lingua.compress_prompt(prompt, instruction="", question="", target_token=200, rate=0.55)
 
-compressed_response = chat_completion(compressed_prompt, model)
+compressed_response = chat_completion(compressed_prompt['compressed_prompt'], model)
 print(compressed_response)
