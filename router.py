@@ -18,6 +18,17 @@ class Router:
         messages=[{"role": "user", "content": query}],
     )
     return response.choices[0].message.content
+  
+  def call_model_stream(query, model):
+    client = Together(api_key=os.environ.get("TOGETHER_API_KEY"))
+    stream = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": query}],
+        stream=True,
+    )
+
+    for chunk in stream:
+        yield chunk.choices[0].delta.content
 
   
   def answer_query(query):
