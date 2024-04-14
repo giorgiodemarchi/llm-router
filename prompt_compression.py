@@ -188,11 +188,11 @@ df f = 2048.
 3.4 Embeddings and Softmax
 Similarly to other sequence transduction models, we use learned embeddings to convert the input
 tokens and output tokens to vectors of dimension dmodel. We also use the usual learned linear transformation and softmax function to convert the decoder output to predicted next-token probabilities. In
-our model, we share the same weight matrix between the two embedding layers and the pre-softmax
+our model, we share the same weight matrix between the two embedding layers and the pre-softmax. 
 
 """
 
-context = context.split('\n')
+#context_list = context.split('\n')
 question = "What is attention?"
 original_prompt = context + " " + question
 response = chat_completion(original_prompt, model)
